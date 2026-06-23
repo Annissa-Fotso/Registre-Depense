@@ -1,4 +1,5 @@
 depenses = []
+POSTE_VALIDES = ["loyer", "ration", "etudes", "sante", "loisir"]
 while True:
     print ("REGISTRE DES DEPENSES")
     print ("1. Ajouter une depense")
@@ -7,14 +8,26 @@ while True:
     print ("4. Quitter")
     choix = input("Votre choix : ")
     if choix == "1":
-        montant = float (input("Montant :  "))
-        poste = input("Poste de dépense : ")
-        depense = {
-            "montant" : montant,
-            "poste" : poste,
-         }
-        depenses.append(depense)
-        print ("Dépense enregistrée avec succès!")
+        try:
+            montant = float (input("Montant :  "))
+            if montant <= 0:
+                print ("Erreur! Le montant doit être supérieur à 0.")
+            else:
+                print ("Postes disponibles : ")
+                for poste in POSTE_VALIDES:
+                    print ("-", poste)
+                poste = input("Choisissez un poste : ").lower()
+                if poste not in POSTE_VALIDES:
+                    print ("Erreur : Poste de depense invalide.")
+                else:
+                    depense = {
+                        "montant" : montant,
+                        "poste" : poste,
+                    }
+                    depenses.append(depense)
+                    print ("Dépense enregistrée avec succès!")
+        except:
+            print ("Erreur! veuillez saisir un nombre valide.")
     elif choix == "2":
         if len(depenses)== 0:
             print ("Aucune dépense enregistrée.")

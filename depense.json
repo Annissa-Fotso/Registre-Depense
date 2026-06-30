@@ -1,0 +1,18 @@
+[
+  {
+    "montant": 50000.0,
+    "poste": "sante"
+  },
+  {
+    "montant": 40000.0,
+    "poste": "etudes"
+  },
+  {
+    "montant": 2000.0,
+    "poste": "loisir"
+  },
+  {
+    "montant": 57000.0,
+    "poste": "ration"
+  }
+]

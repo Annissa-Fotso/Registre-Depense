@@ -1,4 +1,9 @@
-depenses = []
+import json
+try:
+    with open ("depense.json", "r") as fichier:
+        depenses = json.load(fichier)
+except FileNotFoundError:
+    depenses = []
 POSTE_VALIDES = ["loyer", "ration", "etudes", "sante", "loisir"]
 while True:
     print ("REGISTRE DES DEPENSES")
@@ -25,6 +30,8 @@ while True:
                         "poste" : poste,
                     }
                     depenses.append(depense)
+                    with open("depense.json", "w") as fichier :
+                        json.dump(depenses, fichier, indent=2)
                     print ("Dépense enregistrée avec succès!")
         except:
             print ("Erreur! veuillez saisir un nombre valide.")

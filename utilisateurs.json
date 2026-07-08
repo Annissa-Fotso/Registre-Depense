@@ -1,0 +1,24 @@
+[
+  {
+    "nom": "nelly",
+    "depenses": [
+      {
+        "montant": 50000.0,
+        "poste": "sante"
+      }
+    ]
+  },
+  {
+    "nom": "titi",
+    "depenses": [
+      {
+        "montant": 30000.0,
+        "poste": "loyer"
+      },
+      {
+        "montant": 4000.0,
+        "poste": "ration"
+      }
+    ]
+  }
+]

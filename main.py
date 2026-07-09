@@ -66,13 +66,74 @@ def enregistrer_depense (utilisateur):
     utilisateur["depenses"].append(depense)
     sauvegarder()
     print ("Depense enregistrée avec succes pour"  + utilisateur ["nom"] +  "!")
+def consulter_depense():
 
+    nom = input("Entrez votre nom : ").strip()
+    utilisateur_trouve = None
+    for utilisateur in utilisateurs:
+        if utilisateur["nom"] == nom:
+            utilisateur_trouve = utilisateur
+            break
+    if utilisateur_trouve is None:
+        print ("Erreur, cet utilisateur n'existe pas.")
+        return
+    if len (utilisateur_trouve["depenses"]) == 0:
+        print("Aucune depense enregistree pour" + nom + ".")
+        return
+    print ("")
+    print (" Depenses de " + nom )
+    print ("")
+    for depense in utilisateur_trouve ["depenses"]:
+        print ("-", depense["poste"], "-", depense["montant"], "FCFA")
+def consulter_par_poste():
+    nom = input("Entrez votre nom : ").strip()
+    utilisateur_trouve = None
+    for utilisateur in utilisateurs:
+        if utilisateur["nom"] == nom:
+            utilisateur_trouve = utilisateur
+            break
+    if utilisateur_trouve is None:
+        print ("Erreur, cet utilisateur n'existe pas.")
+        return
+    while True:
+        print ("")
+        print("Postes disponibles :")
+        for poste in POSTE_VALIDES:
+            print ("-", poste)
+        while True:
+            poste_choisi = input ("Choisissez un poste : ")
+            if poste_choisi in POSTE_VALIDES:
+                break
+            print ("Erreur : Poste invalide.")
+        depense_du_poste = []
+        for depense in utilisateur_trouve["depenses"]:
+            if depense["poste"] == poste_choisi:
+                depense_du_poste.append(depense)
+        print ("")
+        print("Depenses de " + nom + " - poste : " + poste_choisi)
+        print ("")
+        if len (depense_du_poste) == 0:
+            print("Aucune depense pour ce poste.")
+        else:
+            for depense in depense_du_poste:
+                print ("-", depense["poste"], "-", depense["montant"], "FCFA")
+
+        while True:
+            reponse = input("Voulez-vous consulter un autre poste? (oui/non) : ")
+            if reponse == "non":
+                return
+            elif reponse == "oui":
+                break
+            else:
+                print("Reponse invalide, entrez 'oui' ou 'non'. ")
 while True:
     print("    REGISTRE DES DEPENSES       ")
     print("================================")
     print("1. Enregistrer un utilisateur   ")
     print("2. Enregistrer une depense      ")
-    print("3. Quitter                      ")
+    print("3. Consulter ses depenses       ")
+    print("4. Consulter depense par poste  ")
+    print("5. Quitter                      ")
 
     choix = input ("Votre choix : ") .strip()
     if choix == "1":
@@ -89,6 +150,10 @@ while True:
         else : 
             enregistrer_depense (utilisateur_trouve)
     elif choix == "3":
+        consulter_depense ()
+    elif choix == "4":
+        consulter_par_poste()
+    elif choix == "5":
         print ("Aurevoir !")
         break
     else:

@@ -1,0 +1,16 @@
+[
+  {
+    "id_depense": 1,
+    "id_utilisateur": 2,
+    "nom": "popo",
+    "poste": "loyer",
+    "montant": 30000.0
+  },
+  {
+    "id_depense": 2,
+    "id_utilisateur": 3,
+    "nom": "papa",
+    "poste": "ration",
+    "montant": 40000.0
+  }
+]

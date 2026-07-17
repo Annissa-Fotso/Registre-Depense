@@ -1,15 +1,47 @@
 import json
-try:
-    with open ("utilisateurs.json", "r") as fichier:
-        utilisateurs = json.load(fichier)
-except FileNotFoundError:
-    utilisateurs = []
-
 POSTE_VALIDES = ["loyer", "ration", "etudes", "sante", "loisir", "transport"]
+def charger_utilisateurs ():
+    try:
+        with open ("utilisateurs.json", "r") as fichier:
+            return json.load(fichier)
+    except FileNotFoundError:
+        return []
+    except json.JSONDecodeError:
+        return []
 
-def sauvegarder ():
+def charger_depenses ():
+    try:
+        with open ("depenses.json", "r") as fichier:
+            return json.load(fichier)
+    except FileNotFoundError:
+        return []
+    except json.JSONDecodeError:
+        return []
+    
+def sauvegarder_utilisateurs ():
     with open("utilisateurs.json", "w") as fichier :
         json.dump(utilisateurs, fichier, indent=2)
+
+def sauvegarder_depenses ():
+    with open("depenses.json", "w") as fichier :
+        json.dump (depenses, fichier, indent=2)
+
+def generer_id_utilisateur ():
+    if len(utilisateurs) == 0:
+        return 1
+    return max (u["id"] for u in utilisateurs) + 1
+def generer_id_depense ():
+    if len (depenses) == 0:
+        return 1
+    return max (d["id_depense"] for d in depenses ) + 1
+def trouver_utilisateur(nom):
+    for u in utilisateurs:
+        if u["nom"] == nom :
+            return u
+        return None
+
+utilisateurs = charger_utilisateurs ()
+depenses = charger_depenses ()
 
 def enregistrer_utilisateur ():
     while True:
@@ -26,14 +58,16 @@ def enregistrer_utilisateur ():
             print ("Ce nom existe déjà, veuillez saisir un autre nom.")
             continue
         break
-        
+    nouvel_id = generer_id_utilisateur ()   
     nouvel_utilisateur = {
+        "id": nouvel_id,
         "nom": nom,
-        "depenses": []
+        
     }
     utilisateurs.append(nouvel_utilisateur)
-    sauvegarder ()
-    print ("Nouvel utilisateur '" + nom + "' enregistré avec succès! ")
+    sauvegarder_utilisateurs ()
+    print ("")
+    print ("Nouvel utilisateur '" + nom + "' enregistré  -ID : " + str (nouvel_id))
     
     while True :
         reponse = input("Voulez-vous enregistrer une dépense maintenant ? (oui/non) : ")
@@ -43,6 +77,7 @@ def enregistrer_utilisateur ():
             enregistrer_depense(nouvel_utilisateur)
         else:
             print ("Reponse invalide, entrez 'oui' ou 'non'. ")
+            break
 
 def enregistrer_depense (utilisateur):
     print ("Postes disponibles : ")
@@ -61,11 +96,18 @@ def enregistrer_depense (utilisateur):
                 continue
             break
         except ValueError:
-            print ("Veuillez saisir un nombre valide.") 
-    depense = {"montant": montant, "poste": poste}
-    utilisateur["depenses"].append(depense)
-    sauvegarder()
+            print ("Veuillez saisir un nombre valide.")
+    nouvelle_depense = {
+        "id_depense" : generer_id_depense(),
+        "id_utilisateur" : utilisateur["id"],
+        "nom" : utilisateur ["nom"],
+        "poste": poste,
+        "montant": montant, 
+        }
+    depenses.append(nouvelle_depense)
+    sauvegarder_depenses()
     print ("Depense enregistrée avec succes pour"  + utilisateur ["nom"] +  "!")
+
 def consulter_depense():
 
     nom = input("Entrez votre nom : ").strip()
@@ -148,7 +190,7 @@ while True:
         if utilisateur_trouve is None:
             print ("Erreur! Cet utilisateur introuvable.")
         else : 
-            enregistrer_depense (utilisateur_trouve)
+            enregistrer_depense (utilisateur)
     elif choix == "3":
         consulter_depense ()
     elif choix == "4":

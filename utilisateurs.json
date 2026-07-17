@@ -1,24 +1,14 @@
 [
   {
-    "nom": "nelly",
-    "depenses": [
-      {
-        "montant": 50000.0,
-        "poste": "sante"
-      }
-    ]
+    "id": 1,
+    "nom": "toto"
   },
   {
-    "nom": "titi",
-    "depenses": [
-      {
-        "montant": 30000.0,
-        "poste": "loyer"
-      },
-      {
-        "montant": 4000.0,
-        "poste": "ration"
-      }
-    ]
+    "id": 2,
+    "nom": "popo"
+  },
+  {
+    "id": 3,
+    "nom": "papa"
   }
 ]

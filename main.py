@@ -52,13 +52,13 @@ def enregistrer_utilisateur ():
         break 
 
     nouvel_utilisateur = {
-        "id": generer_id_utilisateur (),
+        "id": generer_id_utilisateur(),
         "nom": nom,    
     }
     utilisateurs.append(nouvel_utilisateur)
     sauvegarder_utilisateurs ()
     print ("")
-    print ("Nouvel utilisateur '" + nom + "' enregistré  avec succes ! ")
+    print ("Utilisateur '" + nom + "' enregistré  -ID : " + str (nouvel_utilisateur["id"]) + " enregistré avec succes !")
     while True :
         reponse = input("Voulez-vous enregistrer une dépense maintenant ? (oui/non) : ")
         if reponse == "non":

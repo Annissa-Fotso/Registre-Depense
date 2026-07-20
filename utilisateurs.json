@@ -1,14 +1,6 @@
 [
   {
     "id": 1,
-    "nom": "toto"
-  },
-  {
-    "id": 2,
-    "nom": "popo"
-  },
-  {
-    "id": 3,
     "nom": "papa"
   }
 ]

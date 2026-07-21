@@ -29,9 +29,9 @@ def generer_id_utilisateur ():
     return max (u["id"] for u in utilisateurs) + 1
 
 def trouver_utilisateur(nom):
-    for u in utilisateurs:
-        if u["nom"] == nom :
-            return u
+    for utilisateur in utilisateurs:
+        if utilisateur["nom"] == nom :
+            return utilisateur
     return None
 
 def afficher_postes():
@@ -110,20 +110,15 @@ def enregistrer_depense (utilisateur = None):
 
 def consulter_depense():
     nom = input("Entrez votre nom : ").strip()
-    utilisateur_trouve = None
-    for utilisateur in utilisateurs:
-        if utilisateur ["nom"] == nom:
-            utilisateur_trouve = utilisateur
-            break
-    if utilisateur_trouve is None:
-        print ("Erreur, cet utilisateur n'existe pas.")
+    if trouver_utilisateur(nom) is None :
+        print ("Erreur! cet utilisateur n'existe pas.")
         return       
     mes_depenses = []
     for d in depenses:
-        if d ["id_utilisateur"] == utilisateur_trouve["id"]:
+        if d ["id_utilisateur"] == trouver_utilisateur(nom)["id"]:
             mes_depenses.append(d)
     if len (mes_depenses) == 0:
-        print("Aucune depense enregistree pour" + nom + ".")
+        print("Aucune depense enregistree pour " + nom + ".")
         return
     print ("")
     print (" Depenses de " + nom )
@@ -135,13 +130,8 @@ def consulter_depense():
         print ("")
 def consulter_par_poste():
     nom = input("Entrez votre nom : ").strip()
-    utilisateur_trouve = None
-    for utilisateur in utilisateurs:
-        if utilisateur["nom"] == nom:
-            utilisateur_trouve = utilisateur
-            break
-    if utilisateur_trouve is None:
-        print ("Erreur, cet utilisateur n'existe pas.")
+    if trouver_utilisateur(nom) is None:
+        print("Erreur: cet utilisateur n'existe pas.")
         return
     while True:
         afficher_postes ()
@@ -152,7 +142,7 @@ def consulter_par_poste():
             print ("Erreur : Poste invalide.")
         depense_du_poste = []
         for d in depenses :
-            if d["id_utilisateur"] == utilisateur_trouve["id"] and d["poste"] == poste_choisi:
+            if d["id_utilisateur"] == trouver_utilisateur(nom)["id"] and d["poste"] == poste_choisi:
                 depense_du_poste.append(d)
         print ("")
         print("Depenses de " + nom + " - " + poste_choisi)

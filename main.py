@@ -40,6 +40,19 @@ def afficher_postes():
     for poste in POSTE_VALIDES:
         print ("-", poste)
 
+def depense_utilisateur(nom):
+    if trouver_utilisateur(nom) is None:
+        print("Erreur! cet utilisateur n'existe pas.")
+        return None
+    mes_depenses = []
+    for d in depenses:
+        if d["id_utilisateur"] == trouver_utilisateur(nom)["id"]:
+            mes_depenses.append(d)
+    if len(mes_depenses) == 0:
+        print("Aucune depense enregistree pour " + nom + ".")
+        return None
+    return mes_depenses
+
 def enregistrer_utilisateur ():
     while True:
         nom = input("Entrez votre nom : ").strip()
@@ -110,16 +123,9 @@ def enregistrer_depense (utilisateur = None):
 
 def consulter_depense():
     nom = input("Entrez votre nom : ").strip()
-    if trouver_utilisateur(nom) is None :
-        print ("Erreur! cet utilisateur n'existe pas.")
+    mes_depenses = depense_utilisateur(nom)
+    if mes_depenses is None:
         return       
-    mes_depenses = []
-    for d in depenses:
-        if d ["id_utilisateur"] == trouver_utilisateur(nom)["id"]:
-            mes_depenses.append(d)
-    if len (mes_depenses) == 0:
-        print("Aucune depense enregistree pour " + nom + ".")
-        return
     print ("")
     print (" Depenses de " + nom )
     print ("")
@@ -169,15 +175,8 @@ depenses = charger_depenses ()
 
 def modifier_depense():
     nom = input("Entrez votre nom : ").strip()
-    if trouver_utilisateur(nom) is None :
-        print ("Erreur! cet utilisateur n'existe pas.")
-        return
-    mes_depenses = []
-    for d in depenses:
-        if d ["id_utilisateur"] == trouver_utilisateur(nom)["id"]:
-            mes_depenses.append(d)
-    if len (mes_depenses) == 0:
-        print("Aucune depense enregistree pour " + nom + ".")
+    mes_depenses = depense_utilisateur(nom)
+    if mes_depenses is None:
         return
     print ("")
     print (" Depenses de " + nom )
@@ -221,7 +220,43 @@ def modifier_depense():
     print("Nouveau poste : ", nouveau_poste)
     print("Nouveau montant :", nouveau_montant, "FCFA")
     print ("Date modifiee :", nouvelle_date)
-     
+def supprimer_depense ():
+    nom = input ("Entrez votre nom : ").strip()
+    mes_depenses = depense_utilisateur(nom)
+    if mes_depenses is None:
+        return
+    print("")
+    print("Depenses de " + nom)
+    print("")
+    for i, d in enumerate(mes_depenses, 1):
+        print(str(i) + ". Poste :", d["poste"], "| Montant :", d["montant"], "FCFA | Date :", d["date"])
+        print("")
+        while True:
+            try:
+                choix = int(input("Numero de la depense à supprimer : "))
+                if choix < 1 or choix > len(mes_depenses):
+                    print ("Erreur! numero invalide.")
+                    continue
+                break
+            except ValueError:
+                print("Erreur! veuillez saisir un nombre.")
+
+        depense_a_supprimer = mes_depenses[choix - 1]
+        print("")
+        print("Depense choisie :", depense_a_supprimer["poste"], "-", depense_a_supprimer["montant"], "FCFA -", depense_a_supprimer["date"])
+        while True:
+            confirmation = input ("Etes-vous sur de vouloir supprimer? (oui/non) : ").lower().strip()
+            if confirmation == "oui":
+                depenses.remove(depense_a_supprimer)
+                sauvegarder_depenses()
+                print("Depense supprimee avec succes !")
+                return
+            elif confirmation == "non":
+                print("Suppression annulee.")
+                return
+            else:
+                print("Reponse invalide, entrez 'oui' ou 'non'.")
+
 while True:
     print("    REGISTRE DES DEPENSES       ")
     print("================================")
@@ -230,7 +265,8 @@ while True:
     print("3. Consulter ses depenses       ")
     print("4. Consulter depense par poste  ")
     print("5. Modifier une depense         ")
-    print("6. Quitter                      ")
+    print("6. Supprimer une depense        ")
+    print("7. Quitter                      ")
 
     choix = input ("Votre choix : ") .strip()
     if choix == "1":
@@ -244,6 +280,8 @@ while True:
     elif choix == "5":
         modifier_depense()
     elif choix == "6":
+        supprimer_depense()
+    elif choix == "7":
         print("Aurevoir !")
         break
     else:

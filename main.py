@@ -257,6 +257,40 @@ def supprimer_depense ():
             else:
                 print("Reponse invalide, entrez 'oui' ou 'non'.")
 
+def total_depense():
+    nom = input("Entrez votre nom : ").strip()
+    mes_depenses = depense_utilisateur(nom)
+    if mes_depenses is None:
+        return
+    total = 0
+    for d in mes_depenses:
+        total = total + d["montant"]
+    print("")
+    print("Total depenses de " + nom)
+    print("")
+    print("Nombre de depenses :", len(mes_depenses))
+    print("Total              :", total, "FCFA")
+    print ("")
+
+def total_depense_par_poste():
+    nom = input("Entrez votre nom : ").strip()
+    mes_depenses = depense_utilisateur(nom)
+    if mes_depenses is None:
+        return
+    totaux_par_poste = {}
+    for d in mes_depenses:
+        poste = d["poste"]
+        if poste not in totaux_par_poste:
+            totaux_par_poste[poste] = 0
+        totaux_par_poste[poste] = totaux_par_poste[poste] + d["montant"]
+    print ("")
+    print("Total par poste de " + nom)
+    for poste in totaux_par_poste:
+        print(poste, ":", totaux_par_poste[poste], "FCFA")
+    print("")
+    print("Total general :", sum(totaux_par_poste.value()), "FCFA")
+    print("")
+
 while True:
     print("    REGISTRE DES DEPENSES       ")
     print("================================")
@@ -266,7 +300,9 @@ while True:
     print("4. Consulter depense par poste  ")
     print("5. Modifier une depense         ")
     print("6. Supprimer une depense        ")
-    print("7. Quitter                      ")
+    print("7. Total des depenses           ")
+    print("8. Total des depenses par poste ")
+    print("9. Quitter                      ")
 
     choix = input ("Votre choix : ") .strip()
     if choix == "1":
@@ -282,6 +318,10 @@ while True:
     elif choix == "6":
         supprimer_depense()
     elif choix == "7":
+        total_depense()
+    elif choix == "8":
+        total_depense_par_poste()
+    elif choix == "9":
         print("Aurevoir !")
         break
     else:

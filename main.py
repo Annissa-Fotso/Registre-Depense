@@ -166,6 +166,62 @@ def consulter_par_poste():
                 print("Reponse invalide, entrez 'oui' ou 'non'. ")
 utilisateurs = charger_utilisateurs ()
 depenses = charger_depenses ()
+
+def modifier_depense():
+    nom = input("Entrez votre nom : ").strip()
+    if trouver_utilisateur(nom) is None :
+        print ("Erreur! cet utilisateur n'existe pas.")
+        return
+    mes_depenses = []
+    for d in depenses:
+        if d ["id_utilisateur"] == trouver_utilisateur(nom)["id"]:
+            mes_depenses.append(d)
+    if len (mes_depenses) == 0:
+        print("Aucune depense enregistree pour " + nom + ".")
+        return
+    print ("")
+    print (" Depenses de " + nom )
+    print ("") 
+    for i, d in enumerate(mes_depenses, 1):
+        print(str(i) + ". Poste :", d["poste"], "| Montant :", d["montant"], "FCFA | Date :", d["date"])
+    print ("")
+    while True:
+        try:
+            choix = int (input("Entrez le numéro de la dépense a modifier : "))
+            if choix < 1 or choix > len(mes_depenses):
+                print("Erreur! numero invalide.")
+                continue
+            break
+        except ValueError:
+            print ("Erreur! veuillez saisir un nombre.")
+    depense_a_modifier = mes_depenses[ choix -1]
+    afficher_postes()
+    while True:
+        nouveau_poste = input("Nouveau poste : ").lower().strip()
+        if nouveau_poste in POSTE_VALIDES:
+            break
+        print("Erreur! poste invalide.")
+
+    while True:
+        try:
+            nouveau_montant = float (input("Nouveau montant : "))
+            if nouveau_montant <= 0:
+                print("Erreur! le montant doit être superieur a 0.")
+                continue
+            break
+        except ValueError:
+            print ("Erreur! veuillez saisir un nombre valide.")
+    nouvelle_date = datetime.now().strftime("%d/%m/%Y %H/:%M")
+    depense_a_modifier["poste"] = nouveau_poste
+    depense_a_modifier["montant"] = nouveau_montant
+    depense_a_modifier["date"] = nouvelle_date
+    sauvegarder_depenses()
+    print("")
+    print("Depenses modifiee avec succes !")
+    print("Nouveau poste : ", nouveau_poste)
+    print("Nouveau montant :", nouveau_montant, "FCFA")
+    print ("Date modifiee :", nouvelle_date)
+     
 while True:
     print("    REGISTRE DES DEPENSES       ")
     print("================================")
@@ -173,7 +229,8 @@ while True:
     print("2. Enregistrer une depense      ")
     print("3. Consulter ses depenses       ")
     print("4. Consulter depense par poste  ")
-    print("5. Quitter                      ")
+    print("5. Modifier une depense         ")
+    print("6. Quitter                      ")
 
     choix = input ("Votre choix : ") .strip()
     if choix == "1":
@@ -185,7 +242,9 @@ while True:
     elif choix == "4":
         consulter_par_poste()
     elif choix == "5":
-        print ("Aurevoir !")
+        modifier_depense()
+    elif choix == "6":
+        print("Aurevoir !")
         break
     else:
         print("Choix invalide.")
